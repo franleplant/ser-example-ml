@@ -5,54 +5,34 @@ from tensorflow import keras
 from tensorflow.keras import layers
 import librosa
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from get_features import get_features
 
 
 print(tf.__version__)
 print(keras.__version__)
 
 
-def extract_features(data, sample_rate):
-    # ZCR
-    result = np.array([])
-    zcr = np.mean(librosa.feature.zero_crossing_rate(y=data).T, axis=0)
-    result = np.hstack((result, zcr))  # stacking horizontally
 
-    # Chroma_stft
-    stft = np.abs(librosa.stft(data))
-    chroma_stft = np.mean(librosa.feature.chroma_stft(S=stft, sr=sample_rate).T, axis=0)
-    result = np.hstack((result, chroma_stft))  # stacking horizontally
+# data, sampling_rate = librosa.load("./happy.mp3")
+# data, sampling_rate = librosa.load("./happy.m4a")
+data, sampling_rate = librosa.load("./happy2.m4a")
+features = get_features(data, sampling_rate)
+features_transposed = np.expand_dims([features], axis=2)
 
-    # MFCC
-    mfcc = np.mean(librosa.feature.mfcc(y=data, sr=sample_rate).T, axis=0)
-    result = np.hstack((result, mfcc))  # stacking horizontally
-
-    # Root Mean Square Value
-    rms = np.mean(librosa.feature.rms(y=data).T, axis=0)
-    result = np.hstack((result, rms))  # stacking horizontally
-
-    # MelSpectogram
-    mel = np.mean(librosa.feature.melspectrogram(y=data, sr=sample_rate).T, axis=0)
-    result = np.hstack((result, mel))  # stacking horizontally
-
-    return result
-
-
-data, sampling_rate = librosa.load("./happy.mp3")
-features = extract_features(data, sampling_rate)
-
-print("input features")
-print(len(features))
-print(features)
-
-[scaled_features] = scaler.fit_transform([features])
-print("scaled features")
-print(len(scaled_features))
-print(scaled_features)
-
+# print("input features")
+# print(len(features_transposed))
+# print(features_transposed)
 
 model = keras.models.load_model("./model.h5")
-model.summary()
+# model.summary()
 
+labels = ['neutral', 'calm', 'happy', 'sad', 'angry', 'fear', 'disgust', 'surprise']
 
-res = model.predict(features)
-print(res)
+res = model.predict(features_transposed)
+
+max_id = np.argmax(res[0])
+
+print("prediction", labels[max_id])
+print("predictions")
+for score, label in zip(res[0], labels):
+    print(label, score)

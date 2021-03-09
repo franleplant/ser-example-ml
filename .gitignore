@@ -1,3 +1,5 @@
 my-env
 .idea
 train-data
+__pycache__
+.DS_Store

@@ -4,7 +4,22 @@ import numpy as np
 
 
 from get_data import normalize_ravdess
+from augment_data import noise, stretch, shift, pitch
 from get_features import get_features
+
+
+def augment_data(data, sample_rate):
+    """
+    grab a single audio file and by augmenting it turn it into 4,
+    we return a list made of the original data and the new data
+    """
+    return [
+        data,
+        noise(data),
+        stretch(data, sample_rate),
+        shift(data),
+        pitch(data, sample_rate),
+    ]
 
 
 def get_training_data():
@@ -24,10 +39,13 @@ def get_training_data():
         # duration and offset are used to take care of the no audio
         # in start and the ending of each audio files as seen above.
         data, sample_rate = librosa.load(path, duration=2.5, offset=0.6)
-        features = get_features(data, sample_rate)
-        # Storing a single list of all the features plus the last one is the target label
-        X.append(features)
-        Y.append(emotion)
+
+        # augment_data returns the original data as the first element
+        for augmented_data in augment_data(data, sample_rate):
+            features = get_features(data, sample_rate)
+            # Storing a single list of all the features plus the last one is the target label
+            X.append(features)
+            Y.append(emotion)
 
     df = pd.DataFrame(X)
     df["label"] = Y
