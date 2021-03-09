@@ -35,6 +35,14 @@ pip3 install -r requirements.txt
 
 
 ```bash
-pyhon3 -m black src/
+python3 -m black src/
 
 ```
+
+## Data
+
+Data is too large to put it in the repo, please download it and place it
+in `train-data`
+
+
+- `train-data/ravdess` -> https://www.kaggle.com/uwrfkaggler/ravdess-emotional-speech-audio
