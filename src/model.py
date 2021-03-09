@@ -10,7 +10,10 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.model_selection import train_test_split
 
 
-df = pd.read_csv("training_data.csv", index_col=0)
+df_ravdess = pd.read_csv("training_data_ravdess.csv", index_col=0)
+df_crema = pd.read_csv("training_data_crema.csv", index_col=0)
+
+df = df_ravdess.append(df_crema)
 
 print(df.head())
 

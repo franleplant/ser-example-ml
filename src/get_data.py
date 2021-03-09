@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 RAVDESS = "./train-data/ravdess/audio_speech_actors_01-24/"
+CREMA = "./train-data/cremad/AudioWAV/"
 
 
 def normalize_ravdess():
@@ -23,23 +24,61 @@ def normalize_ravdess():
     rows = []
     for dir in os.listdir(RAVDESS):
         # as their are 20 different actors in our previous directory we need to extract files for each actor.
-        actor = os.listdir(RAVDESS + dir)
-        for file in actor:
+        actor_dir = os.listdir(RAVDESS + dir)
+        for file in actor_dir:
+            if file.startswith("."):
+                print("skipping dotfile", file)
+                continue
             name, extension = file.split(".")
             [
                 modality,
                 channel,
-                emotion,
+                emotion_id,
                 intensity,
                 statement,
                 repetition,
                 actor,
             ] = name.split("-")
-            emotion_label = emotion_map[int(emotion)]
-            emotion_path = RAVDESS + dir + "/" + file
-            rows.append((emotion_label, emotion_path))
+            emotion = emotion_map[int(emotion_id)]
+            file_path = RAVDESS + dir + "/" + file
+            rows.append((emotion, file_path))
 
     df = pd.DataFrame(rows, columns=["emotion", "path"])
     # print(df.head())
 
     return df
+
+
+def normalize_crema():
+    emotion_map = {
+        'NEU': "neutral",
+        'HAP': "happy",
+        'SAD': "sad",
+        'ANG': "angry",
+        'FEA': "fear",
+        'DIS': "disgust",
+    }
+
+    rows = []
+
+    for file in os.listdir(CREMA) :
+        if file.startswith("."):
+            print("skipping dotfile", file)
+            continue
+
+        # storing file paths
+        file_path = CREMA + file
+
+        # storing file emotions
+        [id, actor, emotion_id, modifier]=file.split('_')
+        emotion = emotion_map[emotion_id]
+        if not emotion:
+            print("skipping unknown emotion file", file)
+            continue
+
+        rows.append((emotion, file_path))
+
+    df = pd.DataFrame(rows, columns=["emotion", "path"])
+    # print(df.head())
+    return df
+

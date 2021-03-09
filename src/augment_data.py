@@ -20,3 +20,17 @@ def shift(data):
 
 def pitch(data, sampling_rate, pitch_factor=0.7):
     return librosa.effects.pitch_shift(data, sampling_rate, pitch_factor)
+
+def augment_data(data, sample_rate):
+    """
+    grab a single audio file and by augmenting it turn it into 4,
+    we return a list made of the original data and the new data
+    """
+
+    return [
+        data,
+        noise(data),
+        pitch(stretch(data), sample_rate),
+        shift(data),
+    ]
+

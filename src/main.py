@@ -11,28 +11,32 @@ from get_features import get_features
 print(tf.__version__)
 print(keras.__version__)
 
-
-
-# data, sampling_rate = librosa.load("./happy.mp3")
-# data, sampling_rate = librosa.load("./happy.m4a")
-data, sampling_rate = librosa.load("./happy2.m4a")
-features = get_features(data, sampling_rate)
-features_transposed = np.expand_dims([features], axis=2)
-
-# print("input features")
-# print(len(features_transposed))
-# print(features_transposed)
-
-model = keras.models.load_model("./model.h5")
-# model.summary()
-
 labels = ['neutral', 'calm', 'happy', 'sad', 'angry', 'fear', 'disgust', 'surprise']
+model = keras.models.load_model("./model.h5")
+model.summary()
 
-res = model.predict(features_transposed)
 
-max_id = np.argmax(res[0])
+validation_audio = [
+     "./happy.mp3",
+     "./happy.m4a",
+     "./happy2.m4a",
+     "./lucas_nienpedo.mp3",
+     "./sol_maichu.m4a",
+     "./fran_scared.m4a",
+     "./fran_scared2.m4a",
+    "./lucas_cursing.mp3",
+    "./nacho_happy.mp3",
+]
 
-print("prediction", labels[max_id])
-print("predictions")
-for score, label in zip(res[0], labels):
-    print(label, score)
+for path in validation_audio:
+    print("procesing", path)
+    data, sampling_rate = librosa.load(path)
+    features = get_features(data, sampling_rate)
+    features_transposed = np.expand_dims([features], axis=2)
+
+    res = model.predict(features_transposed)
+    max_id = np.argmax(res[0])
+    print("prediction", labels[max_id])
+    print("predictions")
+    for score, label in zip(res[0], labels):
+        print(label, score)
