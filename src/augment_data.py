@@ -31,6 +31,6 @@ def augment_data(data, sample_rate):
         data,
         noise(data),
         pitch(stretch(data), sample_rate),
-        shift(data),
+        # shift(data),
     ]
 

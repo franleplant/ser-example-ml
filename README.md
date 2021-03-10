@@ -47,6 +47,8 @@ in `train-data`
 
 - `train-data/ravdess` -> https://www.kaggle.com/uwrfkaggler/ravdess-emotional-speech-audio
 - `train-data/cremad` -> https://www.kaggle.com/ejlok1/cremad
+- `train-data/savee` -> https://www.kaggle.com/ejlok1/surrey-audiovisual-expressed-emotion-savee
+- `train-data/tess` -> https://www.kaggle.com/ejlok1/toronto-emotional-speech-set-tess
 
 
 Original notebook https://www.kaggle.com/franleplant/notebookc90b5d379c

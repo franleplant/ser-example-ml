@@ -4,6 +4,8 @@ import numpy as np
 
 RAVDESS = "./train-data/ravdess/audio_speech_actors_01-24/"
 CREMA = "./train-data/cremad/AudioWAV/"
+SAVEE = "./train-data/savee/"
+TESS = "./train-data/tess/TESS Toronto emotional speech set data/"
 
 
 def normalize_ravdess():
@@ -82,3 +84,54 @@ def normalize_crema():
     # print(df.head())
     return df
 
+def normalize_savee():
+    rows = []
+
+    emotion_map = {
+        'n': "neutral",
+        'h': "happy",
+        'sa': "sad",
+        'a': "angry",
+        'f': "fear",
+        'd': "disgust",
+        "su": "surprise"
+    }
+
+    for file in os.listdir(SAVEE):
+        file_path = SAVEE + file
+        part = file.split('_')[1]
+        ele = part[:-6]
+        if not ele:
+            continue
+        emotion = emotion_map[ele]
+
+        rows.append((emotion, file_path))
+
+    df = pd.DataFrame(rows, columns=["emotion", "path"])
+    # print(df.head())
+    return df
+
+def normalize_tess():
+    rows = []
+
+    for directory in os.listdir(TESS):
+        if directory.startswith("."):
+            print("skipping dotfile", directory)
+            continue
+        for file in os.listdir(TESS + directory):
+            if file.startswith("."):
+                print("skipping dotfile", file)
+                continue
+            file_path = TESS + directory + '/' + file
+
+            [name, extension] = file.split('.')
+            [actor, word, emotion_id] = name.split('_')
+            emotion = emotion_id
+            if emotion_id=='ps':
+                emotion = 'surprise'
+
+            rows.append((emotion, file_path))
+
+    df = pd.DataFrame(rows, columns=["emotion", "path"])
+    # print(df.head())
+    return df

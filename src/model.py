@@ -12,8 +12,10 @@ from sklearn.model_selection import train_test_split
 
 df_ravdess = pd.read_csv("training_data_ravdess.csv", index_col=0)
 df_crema = pd.read_csv("training_data_crema.csv", index_col=0)
+df_savee = pd.read_csv("training_data_savee.csv", index_col=0)
+df_tess = pd.read_csv("training_data_tess.csv", index_col=0)
 
-df = df_ravdess.append(df_crema)
+df = df_ravdess.append(df_crema).append(df_savee).append(df_tess)
 
 print(df.head())
 
@@ -38,7 +40,7 @@ print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)
 
 model = keras.models.Sequential(
     [
-        layers.BatchNormalization(),
+        # layers.BatchNormalization(),
         layers.Conv1D(
             256,
             kernel_size=5,
@@ -47,8 +49,10 @@ model = keras.models.Sequential(
             activation="relu",
             input_shape=(x_train.shape[1], 1),
         ),
+        layers.BatchNormalization(),
         layers.MaxPooling1D(pool_size=5, strides=2, padding="same"),
         layers.Conv1D(256, kernel_size=5, strides=1, padding="same", activation="relu"),
+        layers.BatchNormalization(),
         layers.MaxPooling1D(pool_size=5, strides=2, padding="same"),
         layers.Conv1D(128, kernel_size=5, strides=1, padding="same", activation="relu"),
         layers.MaxPooling1D(pool_size=5, strides=2, padding="same"),

@@ -30,7 +30,7 @@ validation_audio = [
 
 for path in validation_audio:
     print("procesing", path)
-    data, sampling_rate = librosa.load(path)
+    data, sampling_rate = librosa.load(path, duration=2.5, offset=0.6)
     features = get_features(data, sampling_rate)
     features_transposed = np.expand_dims([features], axis=2)
 
