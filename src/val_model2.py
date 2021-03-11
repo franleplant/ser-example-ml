@@ -27,6 +27,10 @@ validation_audio = [
      "./fran_scared2.m4a",
     "./lucas_cursing.mp3",
     "./nacho_happy.mp3",
+    "./lucas_hola.mp3",
+    "./lucas_confused.mp3",
+    "./lucas_angry.mp3",
+    "./nacho_neutral_long.mp3",
 ]
 
 for path in validation_audio:

@@ -30,6 +30,13 @@ def get_features(data, sample_rate):
     rms = calc_rms(data)
     mel = calc_melspectrogram(data, sample_rate)
 
+    # print("features")
+    # print("zcr", len(zcr))
+    # print("chroma", len(chroma))
+    # print("mfcc", len(mfcc))
+    # print("rms", len(rms))
+    # print("mel", len(mel))
+
     # we unfold all values into a very long array, instead of having an array of arrays
     return np.hstack([zcr, chroma, mfcc, rms, mel])
 
